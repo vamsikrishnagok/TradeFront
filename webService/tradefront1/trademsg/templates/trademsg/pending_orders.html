@@ -1,0 +1,64 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+
+{% for each in orders%}
+
+    {% if each.status == "TRIGGER PENDING" %}
+<b>orderID;</b>
+{{ each.order_id }}
+
+
+
+<b>Status:</b>
+{{ each.status}}
+
+<b>Script:</b>
+{{ each.tradingsymbol }}
+
+        <b>Cancle:</b>
+         <form action="." method='post'>
+
+         <input type='text' name='oid' value="{{ each.order_id }}" hidden>
+             <input type='text' name='var' value="{{ each.variety }}" hidden>
+         <input type='submit' value='Cancel'>
+         </form>
+<br>
+<br>
+
+    {% endif %}
+{% endfor %}
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

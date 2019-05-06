@@ -1,0 +1,80 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "79ee7dca35f2d835771af530b02b39bc",
+    "content-hash": "c89f316379fefd70b50b4c2adc77a9dc",
+    "packages": [
+        {
+            "name": "stomp-php/stomp-php",
+            "version": "4.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stomp-php/stomp-php.git",
+                "reference": "c1118c1e661a9e179f251ea89f14e28a65f6843d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stomp-php/stomp-php/zipball/c1118c1e661a9e179f251ea89f14e28a65f6843d",
+                "reference": "c1118c1e661a9e179f251ea89f14e28a65f6843d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "2.*",
+                "phpunit/phpunit": "4.*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stomp\\": "src/Stomp/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Dejan Bosnanac",
+                    "email": "dejan@nighttale.net",
+                    "homepage": "http://www.nighttale.net"
+                },
+                {
+                    "name": "Sören Rohweder",
+                    "email": "s.rohweder@blage.net",
+                    "homepage": "http://www.monofone.de"
+                },
+                {
+                    "name": "Jens Radtke",
+                    "email": "swefl@fin-sn.de",
+                    "homepage": "http://www.fin-sn.de"
+                }
+            ],
+            "description": "stomp support for PHP",
+            "homepage": "http://github.com/stomp-php/stomp-php",
+            "keywords": [
+                "activeMQ",
+                "apollomq",
+                "jms",
+                "messaging",
+                "rabbitmq",
+                "stomp"
+            ],
+            "time": "2017-06-11 09:41:09"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

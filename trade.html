@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Trade Message - Low Float</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        
+        <link href="css/dataTables/datatables.min.css" rel="stylesheet"/>
+        <!--<link href="css/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>-->
+        <link href="css/dataTables/dataTables.responsive.css" rel="stylesheet"/>
+        <link href="css/dataTables/dataTables.tableTools.min.css" rel="stylesheet"/>
+
+ <script type="text/javascript">
+
+
+
+
+
+        function buy(val){
+    //      $('.modal-content').append(`
+    //
+    //      <form action="/action_page.php">
+    //   First name:<br>
+    //   <input type="text" value="Mickey"><br>
+    //   Last name:<br>
+    //   <input type="text" name="lastname" value="Mouse"><br><br>
+    //   <input type="submit" value="Submit">
+    // </form>
+    //
+    //
+    //      `)
+    //
+    //
+    //          var modal = document.getElementById('myModal');
+    //         modal.style.display = "block";
+    //         var span = document.getElementsByClassName("close")[0];
+    //         span.onclick = function() {
+    //     modal.style.display = "none";
+    //      }
+    //
+
+            console.log(val);
+
+        $.post("http://127.0.0.1:8000/buy/", {
+                "script":val,
+
+            }, function (data) {
+                console.log(data)
+                    alert(data.orderId);
+            });
+
+      console.log(val);
+    }
+
+     function sell(val){
+
+            $.post("http://127.0.0.1:8000/sell/", {
+                'script':val,
+
+            }, function (data) {
+                console.log(data)
+            });
+      console.log(val);
+    }
+    </script>
+        <style>
+            .color1 {
+                background-color :white !important;
+            }
+            .color2 {
+                background-color : #cccccc !important;
+            }
+            body {
+                background-color:#e6f7ff;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href="index.html">Entity Vibes</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a>Trade Message</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <input id="tr-color" value="color1" type="hidden"/>
+        <div id="trade" class="col-lg-12">
+            <div class="row form-horizontal">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="symbol" class="col-sm-3 control-label">
+                            Filter
+                        </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="myInput" onkeyup="myFunction(9999999999)" placeholder="Script / Trade Pos" value="no_tradelong,shortlong,">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="symbol" class="col-sm-12 control-label">
+                            Filter Ex : script1,script3,tradepos1,tradepos2
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered" id="myTable">
+                <thead>
+                    <tr>
+                        <th style="display: none;">Filter Column</th>
+                        <th style="min-width: 115px;">Date Time</th>
+                        <th>Script</th>
+                        <th>Close Price</th>
+                        <th>Trade Pos</th>
+                        <th>Entry Price</th>
+                        <th>SL</th>
+                        <th>I-Target Price</th>
+                        <th>I-Target Exit</th>
+                        <th>I-TargetP/L</th>
+                        <th>II-Target Price</th>
+                        <th>II-Target Exit</th>
+                        <th>II-Target P/L</th>
+                        <th>Trailing Exit</th>
+                        <th>Trailing P/L</th>
+                        <th>Share Float</th>
+                    </tr>
+                </thead>
+                <tbody id="data-trade">                    
+                </tbody>
+            </table>
+        </div>
+        
+        <script src="js/jquery-2.1.1.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/dataTables/jquery.dataTables.js"></script>
+        <script src="js/dataTables/dataTables.bootstrap.js"></script>
+        <script src="js/dataTables/dataTables.responsive.js"></script>
+        <script src="js/dataTables/dataTables.tableTools.min.js"></script>
+        <script src="js/dataTables/datatables.min.js"></script>
+        
+        <script src="js/stomp.js"></script>
+        <script>
+            function myFunction(beforeCount) {
+                var input, filter, table, tr, td, i,j,filters,flag,afterCount;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                if(filter != '') {
+                    filters = filter.split(",");
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            flag = 0;
+                            for(j = 0;j < filters.length;j++) {
+                                if(filters[j] != '') {
+                                    if (td.innerHTML.toUpperCase().indexOf(filters[j]) > -1) {
+                                        tr[i].style.display = "";
+                                        flag = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(flag === 0) {
+                                tr[i].style.display = "none";
+                            }
+                        }       
+                    }
+                    afterCount =  $('tr').filter(function() {
+                        return $(this).css('display') !== 'none';
+                    }).length;
+                    if(afterCount > beforeCount) {
+                        var audio = new Audio('notification/open-ended.mp3');
+                        audio.play();
+                    }
+                } else {
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                              tr[i].style.display = "";
+                            } else {
+                              tr[i].style.display = "none";
+                            }
+                        }       
+                    }
+                }
+            }
+        </script>      
+        <script>
+            $(document).ready(function () {               
+                var client, destination,destinationTrade,beforeCount;
+                var url = "ws://192.99.113.10:61614";
+                var login = "admin"+ Math.floor((Math.random() * 1000) + 1);
+                var passcode = "password";
+                destinationTrade = "/topic/tradeMsgTopic";
+                client = Stomp.client(url);
+                client.connect(login, passcode, function (frame) {                    
+                    client.subscribe(destinationTrade, function (message) {
+                        beforeCount = $('tr').filter(function() {
+                            return $(this).css('display') !== 'none';
+                        }).length;
+                        var rowColor = $("#tr-color").val();
+                        if(rowColor === "color1") {
+                            $("#tr-color").val("color2");
+                        } else {
+                            $("#tr-color").val("color1");
+                        }
+                        var data = JSON.parse(message.body);
+                        var record1 = data.record1;
+                        var record2 = data.record2;
+                         
+                        $('#data-trade').prepend("<tr class='"+rowColor+"'>\n\
+                            <td style='display: none;'>" + record1.symbol + record1.tradePosition + record2.tradePosition + "</td>\n\
+                            <td>" + dateFormatter(record1.date) + "</td>\n\
+                            <td style='white-space: nowrap'>" + record1.symbol + "<button  class='btn btn-primary btn-sm' type='button' value="+ record1.symbol +" onclick='buy(this.value);'>buy</button> <button type='button' class='btn btn-danger btn-sm' value="+ record1.symbol +" onclick='sell(this.value);'>sell</button>"+ "</td>\n\
+                            <td>" + Math.round(record1.closePrice * 100) / 100 + "</td>\n\
+                            <td>" + record1.tradePosition + "</td>\n\
+                            <td>" + record1.entryPrice + "</td>\n\
+                            <td>" + record1.sl + "</td>\n\
+                            <td>" + record1.target1Price + "</td>\n\
+                            <td>" + record1.target1ExitPrice + "</td>\n\
+                            <td>" + Math.round(record1.target1PL * 100) / 100 + "</td>\n\
+                            <td>" + record1.target2Price + "</td>\n\
+                            <td>" + record1.target2ExitPrice + "</td>\n\
+                            <td>" + Math.round(record1.target2PL * 100) / 100 + "</td>\n\
+                            <td>" + record1.trailingExitPrice + "</td>\n\
+                            <td>" + Math.round(record1.tailingPL * 100) / 100 + "</td>\n\
+                            <td>" + Math.round(record1.shareFloat * 100) / 100 + "</td>\n\
+                        </tr>");
+                        $('#data-trade').prepend("<tr class='"+rowColor+"'>\n\
+                            <td style='display: none;'>" + record1.symbol + record1.tradePosition + record2.tradePosition + "</td>\n\
+                            <td>" + dateFormatter(record2.date) + "</td>\n\
+                            <td style='white-space: nowrap'>" + record2.symbol + "<button  class='btn btn-primary btn-sm' type='button' value="+ record2.symbol +" onclick='buy(this.value);'>buy</button> <button type='button' class='btn btn-danger btn-sm' value="+ record1.symbol +" onclick='sell(this.value);'>sell</button>"+ "</td>\n\
+                            <td>" + Math.round(record2.closePrice * 100) / 100 + "</td>\n\
+                            <td>" + record2.tradePosition + "</td>\n\
+                            <td>" + record2.entryPrice + "</td>\n\
+                            <td>" + record2.sl + "</td>\n\
+                            <td>" + record2.target1Price + "</td>\n\
+                            <td>" + record2.target1ExitPrice + "</td>\n\
+                            <td>" + Math.round(record2.target1PL * 100) / 100 + "</td>\n\
+                            <td>" + record2.target2Price + "</td>\n\
+                            <td>" + record2.target2ExitPrice + "</td>\n\
+                            <td>" + Math.round(record2.target2PL * 100) / 100 + "</td>\n\
+                            <td>" + record2.trailingExitPrice + "</td>\n\
+                            <td>" + Math.round(record2.tailingPL * 100) / 100 + "</td>\n\
+                            <td>" + Math.round(record2.shareFloat * 100) / 100 + "</td>\n\
+                        </tr>");
+                        myFunction(beforeCount);
+                    });    
+                });
+                
+                function dateFormatter(dateValue) {
+                    // Get date in Current TimeZone
+                    var dt = new Date(dateValue);
+                    // Change current time to UTC
+                    dt.setTime(dt.getTime()+dt.getTimezoneOffset()*60*1000);
+                    // UTC to EST
+                    var offset = -480; //Timezone offset for EST in minutes.
+                    var estDate = new Date(dt.getTime() + offset*60*1000);
+                    var dtos = estDate.toString();
+                    var res = dtos.split(" ");
+                    return res[2]+"-"+res[1]+" "+res[4].substr(0,5);
+                }
+            });
+        </script>
+    </body>
+</html>

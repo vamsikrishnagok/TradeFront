@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Momo Scanner - High Float</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        
+        <link href="css/dataTables/datatables.min.css" rel="stylesheet"/>
+        <!--<link href="css/dataTables/dataTables.bootstrap.css" rel="stylesheet"/>-->
+        <link href="css/dataTables/dataTables.responsive.css" rel="stylesheet"/>
+        <link href="css/dataTables/dataTables.tableTools.min.css" rel="stylesheet"/>
+        <style>
+            .color1 {
+                background-color :white !important;
+            }
+            .color2 {
+                background-color : #cccccc !important;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <a class="navbar-brand" href="index.html">Entity Vibes</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a>Momo Scanner High Float</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="col-lg-12">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse1">Filters &#x21D5;</a>
+                        </h4>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <br>
+                        <div class="row form-horizontal">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="symbol" class="col-sm-2 control-label">
+                                        Filter
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Script Name / Trend">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#helpModal">?</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Rel" class="col-sm-2 control-label">
+                                        Share Float
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="floatInput" onkeyup="floatFunction()" placeholder="Share Float" value='f < 10 ? "#6CC417" : "", f > 10 && f < 30 ? "Yellow" : ""'>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#helpModal">?</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Rel" class="col-sm-2 control-label">
+                                        Rel Volume
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="relInput" onkeyup="relFunction()" placeholder="Rel Volume" value='r > 5 && r < 10 ? "Yellow" : "", r > 10 ? "#6CC417" : "",'>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#helpModal">?</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Day" class="col-sm-2 control-label">
+                                        Day Volume
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="dayInput" onkeyup="dayFunction()" placeholder="Day Volume" value='d > 0.3 && d < 0.7 ? "Yellow" : "", d > 0.7 && d < 6.0 ? "#6CC417" : "", d > 6.0 ? "IndianRed" : ""'>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#helpModal">?</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Mov" class="col-sm-2 control-label">
+                                        Mov
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="movInput" onkeyup="movFunction()" placeholder="Mov" value='m > 1 && m < 2 ? "Yellow" : "", m > 2 ? "#6CC417" : "", m < 0 ? "IndianRed" : ""'>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#helpModal">?</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered" id="myTable">
+                <thead>
+                    <tr>
+                        <th style="display:none;">FilterColumn</th>
+                        <th>Script Name</th>
+                        <th>Date</th>
+                        <th>LTP</th>
+                        <th>Trend</th>
+                        <th>Buy At</th>
+                        <th>Sell At</th>
+                        <th>Mov</th>
+                        <th>Float</th>
+                        <th>VWAP</th>
+                        <th>EMA</th>
+                        <th>Rel Volume</th>
+                        <th>Day Volume</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="helpModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Momo Scanner Help box</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4><b>Filter Example</b></h4>
+                        <p>Example : script1,script3,trend1,trend2</p>
+                        <h4><b>Rel Volume (Variable Name Should Be r)</b></h4>
+                        <p>Example : Expression1<b>,</b>Expression2<b>,</b>Expression3</p>
+                        <p>Example : <b>r</b> > 10 ? "red" : "",r > 3 && r < 9 ? "#232323" : ""</p>
+                        <h4><b>Day Volume (Variable Name Should Be d)</b></h4>
+                        <p>Example :Expression1<b>,</b>Expression2<b>,</b>Expression3</p>
+                        <p>Example : <b>d</b> > 10 ? "red" : "",d > 3 && d < 9 ? "#232323" : ""</p>
+                        <h4><b>Share Float(Variable Name Should Be f)</b></h4>
+                        <p>Example :Expression1<b>,</b>Expression2<b>,</b>Expression3</p>
+                        <p>Example : <b>f</b> > 10 ? "red" : "",f > 3 && f < 9 ? "#232323" : ""</p>
+                        <h4><b>Mov(Variable Name Should Be m)</b></h4>
+                        <p>Example :Expression1<b>,</b>Expression2<b>,</b>Expression3</p>
+                        <p>Example : <b>m</b> > 10 ? "red" : "",m > 3 && m < 9 ? "#232323" : ""</p>
+                        <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator" target="_blank">Ternary Operator</a></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="js/jquery-2.1.1.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/dataTables/jquery.dataTables.js"></script>
+        <script src="js/dataTables/dataTables.bootstrap.js"></script>
+        <script src="js/dataTables/dataTables.responsive.js"></script>
+        <script src="js/dataTables/dataTables.tableTools.min.js"></script>
+        <script src="js/dataTables/datatables.min.js"></script>
+        <script src="js/stomp.js"></script>
+               
+        <script>
+            function relFunction() {
+                var table, tr, td,r,filter,filters,i,j,flag;
+                var colors = [];
+                var relInput = document.getElementById("relInput");
+                filter = relInput.value;
+                if(filter != '') {
+                    filters = filter.split(",");
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[11];
+                        r = td.innerHTML;
+                        flag = 0;
+                        for(j = 0;j < filters.length;j++) {
+                            if(eval(filters[j]) != "") {
+                                td.style.backgroundColor = eval(filters[j]);
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if(flag == 0) {
+                            td.style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                } else {
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[11];
+                        td.style.backgroundColor = "#FFFFFF";
+                    }
+                }
+            }
+            
+            function dayFunction() {
+                var table, tr, td,r,filter,filters,i,j,flag;
+                var colors = [];
+                var dayInput = document.getElementById("dayInput");
+                filter = dayInput.value;
+                if(filter != '') {
+                    filters = filter.split(",");
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[12];
+                        d = td.innerHTML;
+                        flag = 0;
+                        for(j = 0;j < filters.length;j++) {
+                            if(eval(filters[j]) != "") {
+                                td.style.backgroundColor = eval(filters[j]);
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if(flag == 0) {
+                            td.style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                } else {
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[12];
+                        td.style.backgroundColor = "#FFFFFF";
+                    }
+                }
+            }
+            
+            function floatFunction() {
+                var table, tr, td,r,filter,filters,i,j,flag;
+                var colors = [];
+                var dayInput = document.getElementById("floatInput");
+                filter = dayInput.value;
+                if(filter != '') {
+                    filters = filter.split(",");
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[8];
+                        f = td.innerHTML;
+                        flag = 0;
+                        for(j = 0;j < filters.length;j++) {
+                            if(eval(filters[j]) != "") {
+                                td.style.backgroundColor = eval(filters[j]);
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if(flag == 0) {
+                            td.style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                } else {
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[8];
+                        td.style.backgroundColor = "#FFFFFF";
+                    }
+                }
+            }
+            
+            function movFunction() {
+                var table, tr, td,r,filter,filters,i,j,flag;
+                var colors = [];
+                var dayInput = document.getElementById("movInput");
+                filter = dayInput.value;
+                if(filter != '') {
+                    filters = filter.split(",");
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[7];
+                        m = td.innerHTML;
+                        flag = 0;
+                        for(j = 0;j < filters.length;j++) {
+                            if(eval(filters[j]) != "") {
+                                td.style.backgroundColor = eval(filters[j]);
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if(flag == 0) {
+                            td.style.backgroundColor = '#FFFFFF';
+                        }
+                    }
+                } else {
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 1; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[7];
+                        td.style.backgroundColor = "#FFFFFF";
+                    }
+                }
+            }
+        </script>
+        <script>  
+            function myFunction() {
+                var input, filter, table, tr, td, i,j,filters,flag;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                if(filter != '') {
+                    filters = filter.split(",");
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            flag = 0;
+                            for(j = 0;j < filters.length;j++) {
+                                if(filters[j] != '') {
+                                    if (td.innerHTML.toUpperCase().indexOf(filters[j]) > -1) {
+                                        tr[i].style.display = "";
+                                        flag = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(flag === 0) {
+                                tr[i].style.display = "none";
+                            }
+                        }       
+                    }
+                } else {
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                    for (i = 0; i < tr.length; i++) {
+                        td = tr[i].getElementsByTagName("td")[0];
+                        if (td) {
+                            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                              tr[i].style.display = "";
+                            } else {
+                              tr[i].style.display = "none";
+                            }
+                        }       
+                    }
+                }
+            }
+        </script>    
+        <script>
+            $(document).ready(function () {           
+                var client, destination,destinationTrade;
+                var url = "ws://192.99.113.10:61614";
+                var login = "admin"+ Math.floor((Math.random() * 1000) + 1);
+                var passcode = "password";
+                destination = "/topic/INHighFloatMomoScannerTopic";
+                client = Stomp.client(url);
+                client.connect(login, passcode, function (frame) {
+                    client.subscribe(destination, function (message) {
+                        var data = JSON.parse(message.body);
+                        var scriptRecord = data.scriptRecord;
+                        $('#data').prepend("<tr>\n\
+                            <td style='display:none;'>" + scriptRecord.ScriptName +""+scriptRecord.Trend + "</td>\n\
+                            <td>" + scriptRecord.ScriptName + "</td>\n\
+                            <td>" + dateFormatter(scriptRecord.Date) + "</td>\n\
+                            <td>" + scriptRecord.LTP + "</td>\n\
+                            <td>" + scriptRecord.Trend + "</td>\n\
+                            <td>" + scriptRecord.BuyAt + "</td>\n\
+                            <td>" + scriptRecord.SellAt + "</td>\n\
+                            <td>" + scriptRecord.Mov + "</td>\n\
+                            <td>" + scriptRecord.Float + "</td>\n\
+                            <td>" + scriptRecord.VWAP + "</td>\n\
+                            <td>" + scriptRecord.EMA + "</td>\n\
+                            <td>" + scriptRecord.RelVol + "</td>\n\
+                            <td>" + scriptRecord.DayVol + "</td>\n\
+                        </tr>"); 
+                        myFunction();
+                        relFunction();
+                        dayFunction();
+                        floatFunction();
+                        movFunction();
+                    });  
+                });
+                
+                function dateFormatter(dateValue) {
+                    // Get date in Current TimeZone
+                    var dt = new Date(dateValue);
+                    // Change current time to UTC
+                    dt.setTime(dt.getTime()+dt.getTimezoneOffset()*60*1000);
+                    // UTC to EST
+                    var offset = -480; //Timezone offset for EST in minutes.
+                    var estDate = new Date(dt.getTime() + offset*60*1000);
+                    var dtos = estDate.toString();
+                    var res = dtos.split(" ");
+                    // return res[2]+"-"+res[1]+" "+res[4].substr(0,5);
+                    return dateValue;
+                }
+            });
+        </script>
+    </body>
+</html>

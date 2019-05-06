@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+
+<p>Please GOTO the below url and copy paste access token</p>
+{{ url }}
+<br>
+<br>
+<br>
+
+
+<form action="{% url 'trademsg:set_access_token' %}" method='post'>
+
+    AccessToken:
+    <input type='text' name='access_token' value="{{ dd.api_token }}">
+    <br><br>
+
+    Order Type( default : SL ):
+     <select name="order_type">
+  <option value="SL">SL</option>
+  <option value="Limit">Limit</option>
+
+    </select>
+
+    <br><br>
+    Script Exposure:
+    <input type='number' name='script_exp' value="{{ dd.script_exposure }}">
+    <br>
+    <br>
+
+    Cushion Price(in %):
+    <input type='number' name='cup' value="{{ dd.cushion_price}}">
+    <br>
+    <br>
+
+    <input type='submit' value='submit'>
+
+
+</form>
+
+</body>
+</html>
